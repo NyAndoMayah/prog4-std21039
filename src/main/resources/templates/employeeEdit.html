@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Employee</title>
+</head>
+<body>
+<nav>
+  <h1>Welcome to our Company: <span th:text="${company.name}"></span></h1>
+  <td>
+    <img th:src="'data:image/jpeg;base64,' + ${company.logo}" />
+  </td>
+</nav>
+<h1>Edit Employee</h1>
+<form th:action="@{/employees/{id}/edit(id=${employee.id})}" th:object="${employee}" method="post" enctype="multipart/form-data">
+  <input type="hidden" th:field="*{id}">
+  <label for="firstName">First Name:</label>
+  <input type="text" id="firstName" th:field="*{firstName}"/><br/>
+
+  <label for="lastName">Last Name:</label>
+  <input type="text" id="lastName" th:field="*{lastName}"/><br/>
+
+  <label for="username">Username:</label>
+  <input type="text" id="username" th:field="*{username}"/><br/>
+
+  <label for="password">Password:</label>
+  <input type="text" id="password" th:field="*{password}"/><br/>
+
+
+  <label for="birthDate">Date of Birth:</label>
+  <input type="date" id="birthDate" th:field="*{birthDate}"/><br/>
+
+  <label for="countryCode">Country code:</label>
+  <input type="text" id="countryCode" th:field="*{countryCode}"/><br/>
+
+  <label for="phoneNumber">Phone Number:</label>
+  <input type="text" id="phoneNumber" th:field="*{phoneNumber}"/><br/>
+
+  <label for="profileImage">Profile Image:</label>
+  <input type="file" id="profileImage" name="profileImage" th:field="*{picture}"/><br/>
+
+  <label for="address">Address:</label>
+  <input type="text" id="address" th:field="*{address}"/><br/>
+
+  <label for="emailPerso">Email Perso:</label>
+  <input type="text" id="emailPerso" th:field="*{emailPerso}"/><br/>
+
+  <label for="emailPro">Email Pro:</label>
+  <input type="text" id="emailPro" th:field="*{emailPro}"/><br/>
+
+
+  <label for="DepartureDate">Departure Date:</label>
+  <input type="date" id="DepartureDate" th:field="*{departureDate}"/><br/>
+
+  <label for="EntranceDate">Entrance Date:</label>
+  <input type="date" id="EntranceDate" th:field="*{entranceDate}"/><br/>
+
+
+  <label for="CINDate">CINDate:</label>
+  <input type="date" id="CINDate" th:field="*{CINDate}"/><br/>
+
+  <label for="CINPlace">CINPlace:</label>
+  <input type="text" id="CINPlace" th:field="*{CINPLace}"/><br/>
+
+  <label for="CINNumber">CIN_NUMBER:</label>
+  <input type="text" id="CINNumber" th:field="*{CINNUmber}"/><br/>
+
+  <label for="position">Position:</label>
+  <input type="text" id="position" th:field="*{position}"/><br/>
+
+  <label for="childrenNumber">Children Number:</label>
+  <input type="text" id="childrenNumber" th:field="*{childrenNumber}"/><br/>
+
+  <label for="categorieSocioProfesional">Categorie Socio Pro:</label>
+  <select id="categorieSocioProfesional" onchange="updateCategory()" th:field="*{categorieSocioProfessionnelle}">
+    <option value="AGRICULTURAL_WORKERS">AGRICULTURAL_WORKERS</option>
+    <option value="CRAFTSMEN_AND_ARTISANS">CRAFTSMEN_AND_ARTISANS</option>
+    <option value="TRADERS_AND_MERCHANTS">TRADERS_AND_MERCHANTS</option>
+    <option value="CIVIL_SERVANTS_AND_PROFESSIONALS">CIVIL_SERVANTS_AND_PROFESSIONALS</option>
+    <option value="UNSKILLED_LABORERS">UNSKILLED_LABORERS</option>
+  </select><br/>
+
+  <label for="cnapsNumber">CNAPS:</label>
+  <input type="text" id="cnapsNumber" th:field="*{cnapsNumber}"/><br/>
+
+  <label for="sexe">SEXE (H/F):</label>
+  <input type="text" id="sexe" th:field="*{sexe}"/><br/>
+
+  <input type="submit" value="Edit"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Employees</title>
+</head>
+<body>
+<nav>
+    <h1><span th:text="${company.name}"></span></h1>
+    <td>
+        <img th:src="'data:image/jpeg;base64,' + ${company.logo}" />
+    </td>
+</nav>
+
+<form th:action="@{/search}" method="post">
+    <label for="search">Search</label>
+    <div>
+        <input type="text" th:name="keyword" id="search" >
+        <input type="date" th:name="startDate" id="startDate" >
+        <input type="date" th:name="endDate" id="endDate" >
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+
+<form th:action="@{/sort}" method="post" >
+    <div class="mb-4">
+        <label for="sortAttribute" > Sort by :</label>
+        <select id="sortAttribute" name="sortAttribute">
+            <option value="lastName">Last Name</option>
+            <option value="firstName">First Name</option>
+            <option value="sexe">Sex</option>
+            <option value="position">Position</option>
+        </select>
+    </div>
+    <div>
+        <label>Order by:</label>
+        <div class="mt-1">
+            <label for="radioButton1" class="inline-flex items-center">
+                <input type="radio" name="sortOrder" id="radioButton1" value="asc">
+                <span>ASC</span>
+            </label>
+            <label for="radioButton2" >
+                <input type="radio" name="sortOrder" id="radioButton2" value="desc">
+                <span >DESC</span>
+            </label>
+        </div>
+    </div>
+    <button type="submit" >
+        Trier
+    </button>
+</form>
+<table>
+    <tr>
+        <th>Profile Picture</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Birthdate</th>
+        <th>Matricule</th>
+        <th>Country Code</th>
+        <th>Phone Number</th>
+        <th>Address</th>
+        <th>Personal Email</th>
+        <th>Profesional Email</th>
+        <th>CINDate</th>
+        <th>CINNumber</th>
+        <th>CINPlace</th>
+        <th>Position</th>
+        <th>Children in charge</th>
+        <th>Socio-Professional Category</th>
+        <th>CNAPS</th>
+        <th>Departure Date</th>
+        <th>Hiring Date</th>
+        <th>Sex</th>
+        <th>Username</th>
+        <th>Details</th>
+    </tr>
+    <tr th:each="employee : ${employees}">
+        <td>
+            <img th:src="'data:image/jpeg;base64,' + ${employee.picture}" />
+        </td>
+        <td th:text="${employee.firstName}"></td>
+        <td th:text="${employee.lastName}"></td>
+        <td th:text="${employee.birthDate}"></td>
+        <td th:text="${employee.matricule}"></td>
+        <td th:text="${employee.countryCode}"></td>
+        <td th:text="${employee.countryCode + ' ' + employee.phoneNumber}"></td>
+        <td th:text="${employee.address}"></td>
+        <td th:text="${employee.emailPerso}"></td>
+        <td th:text="${employee.emailPro}"></td>
+        <td th:text="${employee.CINDate}"></td>
+        <td th:text="${employee.CINNumber}"></td>
+        <td th:text="${employee.CINPLace}"></td>
+        <td th:text="${employee.position}"></td>
+        <td th:text="${employee.childrenNumber}"></td>
+        <td th:text="${employee.CSP}"></td>
+        <td th:text="${employee.cnapsNumber}"></td>
+        <td th:text="${employee.departureDate}"></td>
+        <td th:text="${employee.entranceDate}"></td>
+        <td th:text="${employee.sexe}"></td>
+        <td th:text="${employee.username}"></td>
+        <td>
+            <a th:href="@{/employeesInfo/{id}(id=${employee.id})}">View Details</a>
+        </td>
+    </tr>
+
+</table>
+
+<script th:inline="javascript">
+    function downloadCSV() {
+        fetch('/export-to-csv')
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(new Blob([blob]));
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = 'employees.csv';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Error downloading CSV:', error));
+    }
+</script>
+<button onclick="downloadCSV()" class="btn btn-primary">Export to CSV</button>
+
+<h2>Add Employee</h2>
+<form th:action="@{/addEmployee}" th:object="${newEmployee}" method="post" enctype="multipart/form-data">
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" th:field="*{firstName}"/><br/>
+
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" th:field="*{lastName}"/><br/>
+
+    <label for="birthDate">Date of Birth:</label>
+    <input type="date" id="birthDate" th:field="*{birthDate}"/><br/>
+
+    <label for="countryCode">Country Code:</label>
+    <input type="text" id="countryCode" th:field="*{countryCode}" REQUIRED/><br/>
+
+    <label for="phoneNumber">Phone Number:</label>
+    <input type="text" id="phoneNumber" th:field="*{phoneNumber}" REQUIRED/><br/>
+
+    <label for="address">Address:</label>
+    <input type="text" id="address" th:field="*{address}"/><br/>
+
+    <label for="emailPerso">Email Perso:</label>
+    <input type="text" id="emailPerso" th:field="*{emailPerso}"/><br/>
+
+    <label for="emailPro">Email Pro:</label>
+    <input type="text" id="emailPro" th:field="*{emailPro}"/><br/>
+
+    <label for="DepartureDate">Departure Date:</label>
+    <input type="date" id="DepartureDate" th:field="*{departureDate}"/><br/>
+
+    <label for="EntranceDate">Entrance Date:</label>
+    <input type="date" id="EntranceDate" th:field="*{entranceDate}"/><br/>
+
+    <label for="CINDate">CIN_DATE:</label>
+    <input type="date" id="CINDate" th:field="*{CINDate}"/><br/>
+
+    <label for="CINPlace">CIN_PLACE:</label>
+    <input type="text" id="CINPlace" th:field="*{CINPLace}"/><br/>
+
+    <label for="CINNumber">CIN_NUMBER:</label>
+    <input type="text" id="CINNumber" th:field="*{CINNUmber}"/><br/>
+
+    <label for="position">Position:</label>
+    <input type="text" id="position" th:field="*{position}"/><br/>
+
+    <label for="childrenNumber">Children in Charge:</label>
+    <input type="text" id="childrenNumber" th:field="*{childrenNumber}"/><br/>
+
+    <label for="categorieSocioProfesional">Categorie Socio Pro:</label>
+
+    <select id="categorieSocioProfesional" onchange="updateCategory()" th:field="*{categorieSocioProfessionnelle}">
+        <option value="AGRICULTURAL_WORKERS">AGRICULTURAL_WORKERS</option>
+        <option value="CRAFTSMEN_AND_ARTISANS">CRAFTSMEN_AND_ARTISANS</option>
+        <option value="TRADERS_AND_MERCHANTS">TRADERS_AND_MERCHANTS</option>
+        <option value="CIVIL_SERVANTS_AND_PROFESSIONALS">CIVIL_SERVANTS_AND_PROFESSIONALS</option>
+        <option value="UNSKILLED_LABORERS">UNSKILLED_LABORERS</option>
+    </select><br/>
+
+    <script th:inline="javascript">
+        function updateCategory() {
+            var selectElement = document.getElementById('categorieSocioProfesional');
+            var selectedValue = selectElement.options[selectElement.selectedIndex].value;
+            document.getElementById('categorieSocioProfesional').value = selectedValue;
+        }
+    </script>
+
+
+    <label for="cnapsNumber">CNAPS:</label>
+    <input type="text" id="cnapsNumber" th:field="*{cnapsNumber}"/><br/>
+
+    <label for="username">USERNAME:</label>
+    <input type="text" id="username" th:field="*{username}"/><br/>
+
+    <label for="password">PASSWORD:</label>
+    <input type="text" id="password" th:field="*{password}"/><br/>
+
+    <label for="sexeSelect">SEXE (H/F):</label>
+    <select id="sexeSelect" onchange="updateSexe()" th:field="*{sexe}" required>
+        <option value="H">Homme</option>
+        <option value="F">Femme</option>
+    </select><br/>
+
+    <script th:inline="javascript">
+        function updateSexe() {
+            var selectElement = document.getElementById('sexeSelect');
+            var selectedValue = selectElement.options[selectElement.selectedIndex].value;
+            document.getElementById('sexe').value = selectedValue;
+        }
+    </script>
+
+
+
+    <label for="profileImage">Profile Image:</label>
+    <input type="file" id="profileImage" name="profileImage" th:field="*{picture}"/><br/>
+
+    <input type="submit" value="Add Employee"/>
+</form>
+
+<form th:action="@{/logout}" method="post"><input type="submit" value="LOGOUT"/></form>
+<a th:href="@{/company}" th:method="get">Create new company</a>
+
+
+</body>
+</html>
